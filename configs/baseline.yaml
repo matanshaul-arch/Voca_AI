@@ -1,0 +1,7 @@
+sample_rate: 16000
+embedding_dim: 192
+model_channels: 64
+model_blocks: 4
+chunk_samples: 160
+inference_device: cpu
+target_frame_latency_ms: 25
