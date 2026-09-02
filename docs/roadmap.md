@@ -7,7 +7,7 @@ Offline positive-only TSE baseline with optional negative conditioning.
 ## Next milestones
 
 1. Replace fallback speaker encoder with a verified ECAPA-TDNN adapter.
-2. Add real speech/noise manifests and speaker-disjoint evaluation.
+2. Add real speech/noise manifests and speaker-disjoint evaluation. (loader implemented; data import pending)
 3. Add complex STFT mask baseline and compare against the time-domain model.
 4. Implement stateful chunked inference and latency benchmarks.
 5. Export to ONNX FP16, then evaluate INT8.
