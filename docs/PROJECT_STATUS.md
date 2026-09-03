@@ -21,6 +21,7 @@ Last known commit before this handoff: `627192b`
 | ECAPA integration | Done for local smoke test | SpeechBrain ECAPA backend loaded successfully; weights remain external cache |
 | Dataset/model policy | Done | `docs/DATASET_AND_MODEL_POLICY.md` |
 | Dataset acquisition plan | Done | `docs/DATASET_INVENTORY.md`; no audio downloaded |
+| Manifest training path | Done, smoke-ready | `scripts/train_manifest.py`; real data still pending |
 | Speaker-disjoint splitting | Done | `voca_tse/dataset/split.py` |
 
 ## Not started
@@ -30,7 +31,7 @@ Last known commit before this handoff: `627192b`
 | T01 | Integrate real pretrained ECAPA-TDNN | P0 | Local integration done; production model revision/license record pending |
 | T02 | Import licensed speech/noise datasets | P0 | Acquisition plan done; actual approved download pending |
 | T03 | Build speaker-disjoint train/validation/test manifests | P0 | Split utility implemented; real manifests pending |
-| T04 | Train on real speech mixtures | P0 | T01–T03 |
+| T04 | Train on real speech mixtures | P0 | Training path ready; approved real data pending |
 | T05 | Add complex STFT mask baseline | P0 | evaluation protocol |
 | T06 | Make separator strictly causal | P0 | T05/model redesign |
 | T07 | Add confidence/uncertainty head | P0 | T04 |
