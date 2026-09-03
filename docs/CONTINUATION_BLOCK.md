@@ -33,6 +33,7 @@ Current completed state:
 
 Latest work:
 - Added lazy optional SpeechBrain ECAPA backend in voca_tse/models/speaker_encoder.py.
+- Installed SpeechBrain locally and verified pretrained `ecapa-voxceleb` loading, 192-d embedding, and unit norm. Weights remain outside Git.
 - Added docs/DATASET_AND_MODEL_POLICY.md with dataset tiers, split rules, metadata and approval gates.
 
 Current unfinished priority table:

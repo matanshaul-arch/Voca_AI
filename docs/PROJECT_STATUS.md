@@ -18,7 +18,7 @@ Last known commit before this handoff: `627192b`
 | Tests | Done | 4 tests passing at last run |
 | GitHub synchronization | Done | `main` pushed to origin |
 | 360 research/specification | Done | `docs/RESEARCH_360_SPEC.md` |
-| ECAPA integration | Partial | Lazy optional SpeechBrain backend added; weights not downloaded |
+| ECAPA integration | Done for local smoke test | SpeechBrain ECAPA backend loaded successfully; weights remain external cache |
 | Dataset/model policy | Done | `docs/DATASET_AND_MODEL_POLICY.md` |
 | Dataset acquisition plan | Done | `docs/DATASET_INVENTORY.md`; no audio downloaded |
 | Speaker-disjoint splitting | Done | `voca_tse/dataset/split.py` |
@@ -27,7 +27,7 @@ Last known commit before this handoff: `627192b`
 
 | ID | Task | Priority | Dependency |
 |---|---|---:|---|
-| T01 | Integrate real pretrained ECAPA-TDNN | P0 | model download/license review |
+| T01 | Integrate real pretrained ECAPA-TDNN | P0 | Local integration done; production model revision/license record pending |
 | T02 | Import licensed speech/noise datasets | P0 | Acquisition plan done; actual approved download pending |
 | T03 | Build speaker-disjoint train/validation/test manifests | P0 | Split utility implemented; real manifests pending |
 | T04 | Train on real speech mixtures | P0 | T01–T03 |
