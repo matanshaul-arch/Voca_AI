@@ -20,6 +20,7 @@ Last known commit before this handoff: `627192b`
 | 360 research/specification | Done | `docs/RESEARCH_360_SPEC.md` |
 | ECAPA integration | Partial | Lazy optional SpeechBrain backend added; weights not downloaded |
 | Dataset/model policy | Done | `docs/DATASET_AND_MODEL_POLICY.md` |
+| Speaker-disjoint splitting | Done | `voca_tse/dataset/split.py` |
 
 ## Not started
 
@@ -27,7 +28,7 @@ Last known commit before this handoff: `627192b`
 |---|---|---:|---|
 | T01 | Integrate real pretrained ECAPA-TDNN | P0 | model download/license review |
 | T02 | Import licensed speech/noise datasets | P0 | dataset inventory and consent |
-| T03 | Build speaker-disjoint train/validation/test manifests | P0 | T02 |
+| T03 | Build speaker-disjoint train/validation/test manifests | P0 | Split utility implemented; real manifests pending |
 | T04 | Train on real speech mixtures | P0 | T01–T03 |
 | T05 | Add complex STFT mask baseline | P0 | evaluation protocol |
 | T06 | Make separator strictly causal | P0 | T05/model redesign |
