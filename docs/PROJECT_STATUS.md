@@ -1,6 +1,6 @@
 # Voca AI — End-of-Day Project Status
 
-Date: 2026-09-02  
+Date: 2026-09-03
 Branch: `main`  
 Last known commit before this handoff: `627192b`
 
@@ -18,6 +18,8 @@ Last known commit before this handoff: `627192b`
 | Tests | Done | 4 tests passing at last run |
 | GitHub synchronization | Done | `main` pushed to origin |
 | 360 research/specification | Done | `docs/RESEARCH_360_SPEC.md` |
+| ECAPA integration | Partial | Lazy optional SpeechBrain backend added; weights not downloaded |
+| Dataset/model policy | Done | `docs/DATASET_AND_MODEL_POLICY.md` |
 
 ## Not started
 

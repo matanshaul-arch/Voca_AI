@@ -31,6 +31,10 @@ Current completed state:
 - 4 tests passed at the last validation.
 - GitHub is synchronized through the latest end-of-day commit.
 
+Latest work:
+- Added lazy optional SpeechBrain ECAPA backend in voca_tse/models/speaker_encoder.py.
+- Added docs/DATASET_AND_MODEL_POLICY.md with dataset tiers, split rules, metadata and approval gates.
+
 Current unfinished priority table:
 T01 real pretrained ECAPA-TDNN; T02 licensed speech/noise datasets; T03 speaker-disjoint manifests; T04 real-speech training; T05 complex STFT baseline; T06 strict causality; T07 confidence head; T08 ONNX FP16; T09 INT8; T10 AudioWorklet/WASM; T11 WebRTC integration; T12 human MOS; T13 WER evaluation; T14 privacy/profile lifecycle; T15 hard-negative mining; T16 multi-mic spatial branch.
 
