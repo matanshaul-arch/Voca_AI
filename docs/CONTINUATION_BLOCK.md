@@ -31,6 +31,9 @@ Current completed state:
 - 4 tests passed at the last validation.
 - GitHub is synchronized through the latest end-of-day commit.
 
+Most recent end-of-day report:
+- Read docs/END_OF_DAY_2026-09-04.md for the 360 research, all task statuses, feature backlog, product map, and execution order.
+
 Latest work:
 - Added lazy optional SpeechBrain ECAPA backend in voca_tse/models/speaker_encoder.py.
 - Installed SpeechBrain locally and verified pretrained `ecapa-voxceleb` loading, 192-d embedding, and unit norm. Weights remain outside Git.
@@ -39,5 +42,5 @@ Latest work:
 Current unfinished priority table:
 T01 real pretrained ECAPA-TDNN; T02 licensed speech/noise datasets; T03 speaker-disjoint manifests; T04 real-speech training; T05 complex STFT baseline; T06 strict causality; T07 confidence head; T08 ONNX FP16; T09 INT8; T10 AudioWorklet/WASM; T11 WebRTC integration; T12 human MOS; T13 WER evaluation; T14 privacy/profile lifecycle; T15 hard-negative mining; T16 multi-mic spatial branch.
 
-Next action: inspect the current repository, then implement T01 (ECAPA adapter) and prepare T02 dataset/licensing documentation. Run tests, update docs/PROJECT_STATUS.md and docs/CONTINUATION_BLOCK.md, commit with a focused message, and push only after explicit approval if the session requires a new push.
+Next action: approve exact dataset releases and terms, then generate real speaker-disjoint manifests and start real-speech training. Run tests, update docs/PROJECT_STATUS.md and docs/CONTINUATION_BLOCK.md, commit with a focused message, and push only after explicit approval if the session requires a new push.
 ```

@@ -1,6 +1,6 @@
 # Voca AI — End-of-Day Project Status
 
-Date: 2026-09-03
+Date: 2026-09-04
 Branch: `main`  
 Last known commit before this handoff: `627192b`
 
@@ -15,7 +15,7 @@ Last known commit before this handoff: `627192b`
 | Manifest dataset loader | Done | JSONL + mono PCM16 WAV loader |
 | Evaluation utilities | Done, limited | SI-SDR/RMS/suppression; no speech benchmark yet |
 | Streaming wrapper | Done, reference | Chunked state API; not production-causal yet |
-| Tests | Done | 4 tests passing at last run |
+| Tests | Done | 6 tests passing at last run |
 | GitHub synchronization | Done | `main` pushed to origin |
 | 360 research/specification | Done | `docs/RESEARCH_360_SPEC.md` |
 | ECAPA integration | Done for local smoke test | SpeechBrain ECAPA backend loaded successfully; weights remain external cache |
@@ -23,6 +23,7 @@ Last known commit before this handoff: `627192b`
 | Dataset acquisition plan | Done | `docs/DATASET_INVENTORY.md`; no audio downloaded |
 | Manifest training path | Done, smoke-ready | `scripts/train_manifest.py`; real data still pending |
 | Speaker-disjoint splitting | Done | `voca_tse/dataset/split.py` |
+| End-of-day 360 report | Done | `docs/END_OF_DAY_2026-09-04.md` |
 
 ## Not started
 
@@ -44,6 +45,12 @@ Last known commit before this handoff: `627192b`
 | T14 | Privacy/profile lifecycle implementation | P0 | product API decision |
 | T15 | Hard-negative mining and multi-negative conditioning | P1 | T04 |
 | T16 | Multi-microphone spatial branch | P2 | hardware test setup |
+| T17 | Turn-taking event API | P1 | T07 |
+| T18 | Teach/classroom mode | P1 | T17 |
+| T19 | Voice quality monitor | P0 | T07 |
+| T20 | Anti-spoofing/replay detection | P2 | T01 |
+| T21 | Observability and model registry | P1 | T04 |
+| T22 | Consent/admin controls | P0 | T14 |
 
 ## Partially completed
 
@@ -58,4 +65,4 @@ Last known commit before this handoff: `627192b`
 
 ## Recommended next session
 
-Start with T01 and T02 in parallel: integrate the ECAPA adapter interface and document the exact dataset/licensing plan. Do not implement online adaptation or public demo deployment yet.
+Next: approve exact dataset releases, generate real manifests, then train/evaluate on real speech. Do not implement online adaptation or public demo deployment yet.
