@@ -28,7 +28,7 @@ Read these files first:
 
 Current completed state:
 - MVP source, synthetic mixer, loss, evaluation, streaming wrapper, manifest-backed mono PCM16 WAV dataset loader.
-- 4 tests passed at the last validation.
+- 7 tests passed at the last validation.
 - GitHub is synchronized through the latest end-of-day commit.
 
 Most recent end-of-day report:
@@ -39,8 +39,16 @@ Latest work:
 - Installed SpeechBrain locally and verified pretrained `ecapa-voxceleb` loading, 192-d embedding, and unit norm. Weights remain outside Git.
 - Added docs/DATASET_AND_MODEL_POLICY.md with dataset tiers, split rules, metadata and approval gates.
 
-Current unfinished priority table:
-T01 real pretrained ECAPA-TDNN; T02 licensed speech/noise datasets; T03 speaker-disjoint manifests; T04 real-speech training; T05 complex STFT baseline; T06 strict causality; T07 confidence head; T08 ONNX FP16; T09 INT8; T10 AudioWorklet/WASM; T11 WebRTC integration; T12 human MOS; T13 WER evaluation; T14 privacy/profile lifecycle; T15 hard-negative mining; T16 multi-mic spatial branch.
+Latest real-data work:
+- Owner-approved SLR12 train-clean-100/dev-clean/test-clean, SLR17 and SLR28 were downloaded locally, checksummed and extracted under Git-ignored `data/raw/`.
+- `docs/DATASET_RELEASE_LOCK.md` records exact artifacts, licenses and hashes.
+- `voca_real_v1` has 308 train / 40 valid / 36 test records and zero speaker overlap across target or interferer roles.
+- The split utility now keeps connected target/interferer speaker groups together.
+- One fallback-encoder epoch reached mean loss 0.4127. Test SI-SDR improved by 0.26 dB and interferer projection suppression was 5.40 dB. The local checkpoint and output are Git-ignored.
+- This is pipeline evidence, not a product-quality result: enrollment currently uses each target clip itself and the standard-NS comparator is still absent.
 
-Next action: approve exact dataset releases and terms, then generate real speaker-disjoint manifests and start real-speech training. Run tests, update docs/PROJECT_STATUS.md and docs/CONTINUATION_BLOCK.md, commit with a focused message, and push only after explicit approval if the session requires a new push.
+Current unfinished priority table:
+T01 production ECAPA review and real-ECAPA training; T02 broader/product dataset review; T03 manifest scale-up and separate enrollment references; T04 quality training plus raw/standard-NS comparison; T05 complex STFT baseline; T06 strict causality; T07 confidence head; T08 ONNX FP16; T09 INT8; T10 AudioWorklet/WASM; T11 WebRTC integration; T12 human MOS; T13 WER evaluation; T14 privacy/profile lifecycle; T15 hard-negative mining; T16 multi-mic spatial branch.
+
+Next action: add separate enrollment utterances and train/evaluate with the verified ECAPA backend; add a declared standard-noise-suppression comparator. Run tests, update status documents, commit with a focused message, and push only after explicit approval.
 ```

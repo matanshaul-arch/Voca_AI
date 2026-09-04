@@ -10,3 +10,24 @@ def test_split_has_no_speaker_overlap():
     assert not ids[0] & ids[2]
     assert not ids[1] & ids[2]
     assert sum(map(len, ids)) == 10
+
+
+def test_split_prevents_interferer_speaker_leakage():
+    records = []
+    for index in range(10):
+        records.append({
+            "target_speaker_id": f"target-{index}",
+            "interferer_speaker_id": f"interferer-{index}",
+            "mixture": f"mix-{index}.wav",
+            "target": f"target-{index}.wav",
+            "interferer": f"interferer-{index}.wav",
+        })
+    splits = speaker_disjoint_split(records, seed=7)
+    speaker_sets = []
+    for rows in splits.values():
+        speaker_sets.append({speaker for row in rows for speaker in (
+            row["target_speaker_id"], row["interferer_speaker_id"]
+        )})
+    assert not speaker_sets[0] & speaker_sets[1]
+    assert not speaker_sets[0] & speaker_sets[2]
+    assert not speaker_sets[1] & speaker_sets[2]

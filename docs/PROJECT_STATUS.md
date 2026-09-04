@@ -2,7 +2,7 @@
 
 Date: 2026-09-04
 Branch: `main`  
-Last known commit before this handoff: `627192b`
+Last known commit before this work: `56e8007`
 
 ## Completed
 
@@ -24,15 +24,19 @@ Last known commit before this handoff: `627192b`
 | Manifest training path | Done, smoke-ready | `scripts/train_manifest.py`; real data still pending |
 | Speaker-disjoint splitting | Done | `voca_tse/dataset/split.py` |
 | End-of-day 360 report | Done | `docs/END_OF_DAY_2026-09-04.md` |
+| Approved real-data acquisition | Done for baseline releases | SLR12 train-clean-100/dev-clean/test-clean, SLR17, SLR28; checksums in `docs/DATASET_RELEASE_LOCK.md` |
+| Real speaker-disjoint manifests | Done for `voca_real_v1` | 308 train / 40 valid / 36 test; zero target/interferer speaker overlap |
+| Initial real-speech training | Done, limited | 1 epoch, fallback encoder, 308 records; checkpoint remains local |
+| Real-speech evaluation | Done, limited | test SI-SDR improvement +0.26 dB; interferer projection suppression 5.40 dB |
 
 ## Not started
 
 | ID | Task | Priority | Dependency |
 |---|---|---:|---|
 | T01 | Integrate real pretrained ECAPA-TDNN | P0 | Local integration done; production model revision/license record pending |
-| T02 | Import licensed speech/noise datasets | P0 | Acquisition plan done; actual approved download pending |
-| T03 | Build speaker-disjoint train/validation/test manifests | P0 | Split utility implemented; real manifests pending |
-| T04 | Train on real speech mixtures | P0 | Training path ready; approved real data pending |
+| T02 | Import licensed speech/noise datasets | P0 | Baseline releases imported; broader/product datasets still require review |
+| T03 | Build speaker-disjoint train/validation/test manifests | P0 | `voca_real_v1` complete; scale-up pending |
+| T04 | Train on real speech mixtures | P0 | Initial fallback run complete; ECAPA run and quality improvement pending |
 | T05 | Add complex STFT mask baseline | P0 | evaluation protocol |
 | T06 | Make separator strictly causal | P0 | T05/model redesign |
 | T07 | Add confidence/uncertainty head | P0 | T04 |
@@ -60,9 +64,9 @@ Last known commit before this handoff: `627192b`
 | TSE model | untrained reference TCN | real training and quality gates |
 | Streaming | wrapper recomputes context | stateful causal layers and bounded allocations |
 | Latency | synthetic CPU benchmark | declared device matrix + p95 end-to-end test |
-| Dataset | loader exists | actual licensed data and reproducible manifests |
+| Dataset | approved baseline and manifests exist | scale-up, enrollment references and domain data |
 | Negative conditioning | API exists | hard-negative experiments and ablation |
 
 ## Recommended next session
 
-Next: approve exact dataset releases, generate real manifests, then train/evaluate on real speech. Do not implement online adaptation or public demo deployment yet.
+Next: replace target-as-enrollment/fallback evaluation with separate enrollment utterances and real ECAPA embeddings, then compare raw mixture, a declared standard-NS baseline, and Voca TSE. Do not implement online adaptation or public demo deployment yet.
