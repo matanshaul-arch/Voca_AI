@@ -8,7 +8,7 @@ We are continuing the Voca AI project from /Users/matanshaul/Projects/Voca_AI.
 Hard boundary: perform all filesystem, shell, read, write, edit and execution work only inside /Users/matanshaul/Projects/Voca_AI. Do not read or write outside it without my explicit permission. Preserve all existing work. Do not force-push or rewrite Git history.
 
 Repository: https://github.com/matanshaul-arch/Voca_AI.git
-Branch: main. Latest local commit: cc1e150 Record ECAPA real-speech evaluation. The branch is three commits ahead of origin/main; push only when explicitly requested.
+Branch: main. Latest local commit: 07d3aa3 Fix causal streaming and target level handling. The branch is synchronized with origin/main; push only when explicitly requested.
 
 Objective: build Voca AI Speaker Intelligence — a privacy-first, real-time Target Speaker Extraction layer that uses an enrolled speaker profile to preserve the target, suppress interferers/noise, and emit confidence, VAD, turn-taking and interruption events for Teach, Meet, Broadcast, Agent and Accessibility modes.
 
@@ -41,8 +41,9 @@ Current completed state:
 - `scripts/preflight.py` is mandatory before new experiments.
 - ECAPA model: SpeechBrain `speechbrain/spkrec-ecapa-voxceleb`, pinned revision `0f99f2d0ebe89ac095bcc5903c4dd8f72b367286`, cached under Git-ignored `data/cache/ecapa-voxceleb`.
 - ECAPA smoke test passed: shape (1,192), unit norm, finite output.
-- One ECAPA CPU epoch using separate enrollment: loss 0.0553; test raw mixture SI-SDR -1.288 dB; estimate SI-SDR -0.773 dB; improvement +0.515 dB; interferer projection suppression 23.61 dB; target level delta -19.91 dB.
-- Interpretation: identity-conditioned suppression works, but target amplitude collapses. Add target-level preservation/anti-collapse loss or calibrated post-gain before claiming product quality.
+- Causal review complete: the separator uses left-padded causal convolutions and per-timestep LayerNorm; an offline/streaming parity test passes. Batch padding is masked for enrollment and estimates.
+- Target-level loss calibration complete with fixed seed. On validation after one CPU epoch, `lambda_level=0.03` achieved +0.624 dB SI-SDR improvement, 5.67 dB interferer projection suppression and -1.52 dB target level delta. The 3-epoch run regressed target level to -8.63 dB, so longer training requires validation-based early stopping.
+- Test results used during the calibration are exploratory because that split was inspected before model selection. Create a fresh unseen challenge set before external quality claims.
 - Standard noise suppression comparator has not yet been implemented. UI/app has not yet been implemented.
 - Final validation passed: preflight, manifest validation, py_compile and 7 tests.
 
@@ -55,9 +56,9 @@ Unfinished task table:
 T01 — ECAPA production review: partially complete; revision/cache/smoke done, license/model-card review and broader validation remain; P0.
 T02 — Approved real datasets: partially complete; baseline imported, broader/product datasets remain; P0.
 T03 — Speaker-disjoint manifests: partially complete; v1 complete, scale-up and immutable challenge set remain; P0.
-T04 — Real-speech training: partially complete; initial ECAPA run complete, longer training and target-level preservation remain; P0.
+T04 — Real-speech training: partially complete; level-loss calibration complete, validation-based early stopping and broader training remain; P0.
 T05 — Complex STFT mask baseline: not started; compare with time-domain separator; P0.
-T06 — Strict causal separator: partially complete; remove future-frame dependency and measure p95 latency; P0.
+T06 — Strict causal separator: complete; causal/offline-streaming parity plus 0.643 ms/chunk CPU benchmark; P0.
 T07 — Confidence/uncertainty head: not started; calibrated bypass/attenuation policy; P0.
 T08 — ONNX FP16/parity: not started; numerical parity and device benchmark; P1.
 T09 — INT8 calibration/QAT: not started; quality/latency tradeoff; P1.
@@ -81,11 +82,10 @@ P1: WER improvement mode; Backchannel vs interruption; Speaker-aware captions; T
 P2: Multi-mic spatial mode; Personal auditory focus; Acoustic event labels; Anti-spoofing; Multi-device speaker profile.
 
 Recommended next execution order:
-1. Add target-level preservation/anti-collapse loss and a declared standard-NS comparator.
-2. Train longer with ECAPA and separate enrollment; report target retention, SI-SDR, suppression and dropout.
-3. Fix strict causality and benchmark CPU/native MPS when available.
-4. Add confidence/quality monitor, then human MOS and WER evaluation.
-5. Only then build a local demo UI/API; do not deploy publicly yet.
+1. Build a local-only product prototype around the calibrated research candidate; expose experimental quality status.
+2. Add validation-based early stopping and a declared standard-NS comparator before longer training.
+3. Create a fresh unseen challenge set, then run human MOS and WER evaluation.
+4. Add confidence/quality monitor before any external demo or deployment.
 
 Working rules:
 - Check git status before changes.

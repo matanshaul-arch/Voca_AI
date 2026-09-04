@@ -2,7 +2,7 @@
 
 Date: 2026-09-04
 Branch: `main`  
-Latest recorded commit: `cc1e150`
+Latest recorded commit: `07d3aa3`
 
 ## Completed
 
@@ -14,8 +14,8 @@ Latest recorded commit: `cc1e150`
 | Synthetic baseline training | Done, limited | Runs on synthetic signals only |
 | Manifest dataset loader | Done | JSONL + mono PCM16 WAV loader |
 | Evaluation utilities | Done, limited | SI-SDR/RMS/suppression; no speech benchmark yet |
-| Streaming wrapper | Done, reference | Chunked state API; not production-causal yet |
-| Tests | Done | 7 tests passing at final validation |
+| Streaming wrapper | Done, causal reference | Causal context validation and offline/streaming parity test |
+| Tests | Done | 8 tests passing at final validation |
 | GitHub synchronization | Done | `main` pushed to origin |
 | 360 research/specification | Done | `docs/RESEARCH_360_SPEC.md` |
 | ECAPA integration | Done for local smoke test and baseline | SpeechBrain ECAPA loaded from pinned revision; weights cached under Git-ignored `data/cache` |
@@ -32,6 +32,8 @@ Latest recorded commit: `cc1e150`
 | Separate enrollment references | Done for `voca_real_v1` | Every record uses a different source utterance from the same target speaker |
 | Preflight command | Done | `scripts/preflight.py` checks runtime, manifests, leakage, sample shapes and enrollment separation |
 | ECAPA real-speech run | Done, limited | Pinned revision; 1 epoch on CPU with separate enrollment; test SI-SDR improvement +0.515 dB and interferer projection suppression 23.61 dB |
+| Causal/level-loss review | Done | Causal padding and future-looking normalization fixed; enrollment/output padding masked; level-loss reporting corrected |
+| Level-loss calibration | Done, limited | Fixed-seed 1-epoch sweep selected `lambda_level=0.03` on validation: +0.624 dB SI-SDR, 5.67 dB suppression, -1.52 dB target level delta |
 
 ## Not started
 
@@ -40,9 +42,9 @@ Latest recorded commit: `cc1e150`
 | T01 | Integrate real pretrained ECAPA-TDNN | P0 | Local integration done; production model revision/license record pending |
 | T02 | Import licensed speech/noise datasets | P0 | Baseline releases imported; broader/product datasets still require review |
 | T03 | Build speaker-disjoint train/validation/test manifests | P0 | `voca_real_v1` complete; scale-up pending |
-| T04 | Train on real speech mixtures | P0 | Initial ECAPA run complete; target level loss requires calibration/AGC and longer training |
+| T04 | Train on real speech mixtures | P0 | Initial ECAPA run and level-loss calibration complete; add validation-based early stopping before longer training |
 | T05 | Add complex STFT mask baseline | P0 | evaluation protocol |
-| T06 | Make separator strictly causal | P0 | T05/model redesign |
+| T06 | Make separator strictly causal | Done | CausalConv1d + per-timestep LayerNorm; parity test and streaming benchmark pass |
 | T07 | Add confidence/uncertainty head | P0 | T04 |
 | T08 | ONNX FP16 export and parity tests | P1 | T06 |
 | T09 | INT8 calibration/QAT study | P1 | T08 |
@@ -65,12 +67,12 @@ Latest recorded commit: `cc1e150`
 | Area | Current gap | Required completion |
 |---|---|---|
 | Speaker encoder | ECAPA adapter pinned and cached | license/model-card production review and broader validation |
-| TSE model | untrained reference TCN | real training and quality gates |
-| Streaming | wrapper recomputes context | stateful causal layers and bounded allocations |
+| TSE model | calibrated 1-epoch research candidate | validation-based early stopping, stronger architecture and quality gates |
+| Streaming | causal reference wrapper | stateful internal layers and bounded allocations |
 | Latency | synthetic CPU benchmark | declared device matrix + p95 end-to-end test |
 | Dataset | approved baseline and manifests exist | scale-up, more domain data and immutable challenge set |
 | Negative conditioning | API exists | hard-negative experiments and ablation |
 
 ## Recommended next session
 
-Next: add target-level preservation/anti-collapse loss, train longer with ECAPA, and implement a declared standard-NS comparator. The current ECAPA result improves SI-SDR but has target level delta -19.91 dB. Do not implement online adaptation or public demo deployment yet.
+Next: build a local product prototype around the calibrated research candidate, with explicit quality/experimental labeling. Before any public deployment, add validation-based early stopping, a standard-NS comparator, confidence controls and a fresh unseen challenge set. The 3-epoch experiment regressed target level to -8.63 dB, so do not adopt longer training without early stopping.

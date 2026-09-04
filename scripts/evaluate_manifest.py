@@ -68,6 +68,8 @@ def main():
         "manifest": args.manifest,
         "checkpoint": args.checkpoint,
         "encoder_backend": backend,
+        "lambda_level": checkpoint.get("lambda_level"),
+        "seed": checkpoint.get("seed"),
         "records": len(dataset),
         "raw_mixture_si_sdr_db": sum(raw_scores) / len(raw_scores),
         "estimate_si_sdr_db": sum(estimate_scores) / len(estimate_scores),

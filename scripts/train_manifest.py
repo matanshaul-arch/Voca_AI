@@ -23,8 +23,11 @@ def main():
     parser.add_argument("--batch-size", type=int, default=2)
     parser.add_argument("--backend", choices=["fallback", "ecapa"], default="fallback")
     parser.add_argument("--ecapa-cache", default="data/cache/ecapa-voxceleb")
+    parser.add_argument("--lambda-level", type=float, default=0.05)
+    parser.add_argument("--seed", type=int, default=20260904)
     parser.add_argument("--output", default="checkpoints/manifest-baseline.pt")
     args = parser.parse_args()
+    torch.manual_seed(args.seed)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     dataset = ManifestTSEDataset(args.manifest)
     loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, collate_fn=collate_tse)
@@ -34,7 +37,10 @@ def main():
     ).to(device).eval()
     model = DualConditioningSeparator().to(device)
     optimizer = Adam(model.parameters(), lr=1e-3)
-    loss_fn = ContrastiveTSELoss(encoder, lambda_contrastive=0.0, lambda_leakage=0.0)
+    loss_fn = ContrastiveTSELoss(
+        encoder, lambda_contrastive=0.0, lambda_leakage=0.0,
+        lambda_level=args.lambda_level,
+    )
     for epoch in range(1, args.epochs + 1):
         model.train(); running = 0.0
         for batch in loader:
@@ -54,7 +60,12 @@ def main():
             running += float(loss.detach())
         print(f"epoch={epoch} mean_loss={running / max(1, len(loader)):.4f}")
     output = Path(args.output); output.parent.mkdir(parents=True, exist_ok=True)
-    torch.save({"model": model.state_dict(), "encoder_backend": args.backend}, output)
+    torch.save({
+        "model": model.state_dict(),
+        "encoder_backend": args.backend,
+        "lambda_level": args.lambda_level,
+        "seed": args.seed,
+    }, output)
     print(f"saved={output} device={device} records={len(dataset)}")
 
 
