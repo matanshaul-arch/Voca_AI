@@ -76,4 +76,4 @@ Latest recorded commit: `07d3aa3`
 
 ## Recommended next session
 
-Next: build a local product prototype around the calibrated research candidate, with explicit quality/experimental labeling. Before any public deployment, add validation-based early stopping, a standard-NS comparator, confidence controls and a fresh unseen challenge set. The 3-epoch experiment regressed target level to -8.63 dB, so do not adopt longer training without early stopping.
+Next: run a local usability capture for the "Chen teaches" scenario using the experimental prototype. Before any public deployment, add validation-based early stopping, a standard-NS comparator, confidence controls and a fresh unseen challenge set. The 3-epoch experiment regressed target level to -8.63 dB, so do not adopt longer training without early stopping.
