@@ -2,7 +2,7 @@
 
 Date: 2026-09-04
 Branch: `main`  
-Last known commit before this work: `56e8007`
+Latest recorded commit: `cc1e150`
 
 ## Completed
 
@@ -10,24 +10,24 @@ Last known commit before this work: `56e8007`
 |---|---|---|
 | Repository initialized | Done | GitHub remote configured |
 | Initial MVP source | Done | PyTorch model, mixer, loss, tests |
-| Local virtual environment | Done | `.venv` with torch/numpy/pytest |
+| Local virtual environment | Done | Supported `.venv311` with CPython 3.11.16; legacy `.venv` is Python 3.9.6 |
 | Synthetic baseline training | Done, limited | Runs on synthetic signals only |
 | Manifest dataset loader | Done | JSONL + mono PCM16 WAV loader |
 | Evaluation utilities | Done, limited | SI-SDR/RMS/suppression; no speech benchmark yet |
 | Streaming wrapper | Done, reference | Chunked state API; not production-causal yet |
-| Tests | Done | 6 tests passing at last run |
+| Tests | Done | 7 tests passing at final validation |
 | GitHub synchronization | Done | `main` pushed to origin |
 | 360 research/specification | Done | `docs/RESEARCH_360_SPEC.md` |
-| ECAPA integration | Done for local smoke test | SpeechBrain ECAPA backend loaded successfully; weights remain external cache |
+| ECAPA integration | Done for local smoke test and baseline | SpeechBrain ECAPA loaded from pinned revision; weights cached under Git-ignored `data/cache` |
 | Dataset/model policy | Done | `docs/DATASET_AND_MODEL_POLICY.md` |
-| Dataset acquisition plan | Done | `docs/DATASET_INVENTORY.md`; no audio downloaded |
+| Dataset acquisition plan | Done | `docs/DATASET_INVENTORY.md`; approved baseline audio downloaded locally |
 | Manifest training path | Done, smoke-ready | `scripts/train_manifest.py`; real data still pending |
 | Speaker-disjoint splitting | Done | `voca_tse/dataset/split.py` |
 | End-of-day 360 report | Done | `docs/END_OF_DAY_2026-09-04.md` |
 | Approved real-data acquisition | Done for baseline releases | SLR12 train-clean-100/dev-clean/test-clean, SLR17, SLR28; checksums in `docs/DATASET_RELEASE_LOCK.md` |
 | Real speaker-disjoint manifests | Done for `voca_real_v1` | 308 train / 40 valid / 36 test; zero target/interferer speaker overlap |
 | Initial real-speech training | Done, limited | 1 epoch, fallback encoder, 308 records; checkpoint remains local |
-| Real-speech evaluation | Done, limited | test SI-SDR improvement +0.26 dB; interferer projection suppression 5.40 dB |
+| Real-speech evaluation | Done, limited | fallback: +0.262 dB; ECAPA: +0.515 dB SI-SDR improvement |
 | Python 3.11 environment | Done | Project-local `.venv311`, CPython 3.11.16; provenance in `docs/LOCAL_ENVIRONMENT.md` |
 | Separate enrollment references | Done for `voca_real_v1` | Every record uses a different source utterance from the same target speaker |
 | Preflight command | Done | `scripts/preflight.py` checks runtime, manifests, leakage, sample shapes and enrollment separation |
@@ -64,11 +64,11 @@ Last known commit before this work: `56e8007`
 
 | Area | Current gap | Required completion |
 |---|---|---|
-| Speaker encoder | ECAPA adapter pinned; new local cache path configured | explicit weight-download approval, smoke test and real-ECAPA training |
+| Speaker encoder | ECAPA adapter pinned and cached | license/model-card production review and broader validation |
 | TSE model | untrained reference TCN | real training and quality gates |
 | Streaming | wrapper recomputes context | stateful causal layers and bounded allocations |
 | Latency | synthetic CPU benchmark | declared device matrix + p95 end-to-end test |
-| Dataset | approved baseline and manifests exist | scale-up, enrollment references and domain data |
+| Dataset | approved baseline and manifests exist | scale-up, more domain data and immutable challenge set |
 | Negative conditioning | API exists | hard-negative experiments and ablation |
 
 ## Recommended next session
