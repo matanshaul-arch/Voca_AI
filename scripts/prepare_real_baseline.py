@@ -91,10 +91,15 @@ def main():
         if rng.random() < 0.5:
             target_id, interferer_id = interferer_id, target_id
         target_path = rng.choice(speakers[target_id])
+        enrollment_candidates = [path for path in speakers[target_id] if path != target_path]
+        if not enrollment_candidates:
+            raise RuntimeError(f"speaker {target_id} has no separate enrollment utterance")
+        enrollment_path = rng.choice(enrollment_candidates)
         interferer_path = rng.choice(speakers[interferer_id])
         noise_path = rng.choice(noises)
         rir_path = rng.choice(rirs)
         target = load_mono(target_path, length, rng)
+        enrollment = load_mono(enrollment_path, length, rng)
         interferer = load_mono(interferer_path, length, rng)
         noise = load_mono(noise_path, length, rng)
         rir = load_mono(rir_path, min(length, SAMPLE_RATE), rng)
@@ -118,11 +123,16 @@ def main():
         write_pcm16(project_root / relative_dir / "mixture.wav", mixture)
         write_pcm16(project_root / relative_dir / "target.wav", target)
         write_pcm16(project_root / relative_dir / "interferer.wav", interferer)
+        write_pcm16(project_root / relative_dir / "enrollment.wav", enrollment)
         records.append({
             "root": ".",
             "mixture": str(relative_dir / "mixture.wav"),
             "target": str(relative_dir / "target.wav"),
             "interferer": str(relative_dir / "interferer.wav"),
+            "enrollment": str(relative_dir / "enrollment.wav"),
+            "enrollment_source": str(enrollment_path.relative_to(libri_root)),
+            "target_source": str(target_path.relative_to(libri_root)),
+            "interferer_source": str(interferer_path.relative_to(libri_root)),
             "target_speaker_id": target_id,
             "interferer_speaker_id": interferer_id,
             "source_dataset": "LibriSpeech SLR12",

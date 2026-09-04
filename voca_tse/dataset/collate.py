@@ -9,6 +9,7 @@ def collate_tse(batch):
         "mixture": pad_sequence([item["mixture"] for item in batch], batch_first=True),
         "target": pad_sequence([item["target"] for item in batch], batch_first=True),
         "interferer": pad_sequence([item["interferer"] for item in batch], batch_first=True),
+        "enrollment": pad_sequence([item.get("enrollment", item["target"]) for item in batch], batch_first=True),
         "lengths": lengths,
         "metadata": [item["metadata"] for item in batch],
     }

@@ -28,6 +28,9 @@ Last known commit before this work: `56e8007`
 | Real speaker-disjoint manifests | Done for `voca_real_v1` | 308 train / 40 valid / 36 test; zero target/interferer speaker overlap |
 | Initial real-speech training | Done, limited | 1 epoch, fallback encoder, 308 records; checkpoint remains local |
 | Real-speech evaluation | Done, limited | test SI-SDR improvement +0.26 dB; interferer projection suppression 5.40 dB |
+| Python 3.11 environment | Done | Project-local `.venv311`, CPython 3.11.16; provenance in `docs/LOCAL_ENVIRONMENT.md` |
+| Separate enrollment references | Done for `voca_real_v1` | Every record uses a different source utterance from the same target speaker |
+| Preflight command | Done | `scripts/preflight.py` checks runtime, manifests, leakage, sample shapes and enrollment separation |
 
 ## Not started
 
@@ -60,7 +63,7 @@ Last known commit before this work: `56e8007`
 
 | Area | Current gap | Required completion |
 |---|---|---|
-| Speaker encoder | deterministic fallback only | real ECAPA adapter + cached weights |
+| Speaker encoder | ECAPA adapter pinned; new local cache path configured | explicit weight-download approval, smoke test and real-ECAPA training |
 | TSE model | untrained reference TCN | real training and quality gates |
 | Streaming | wrapper recomputes context | stateful causal layers and bounded allocations |
 | Latency | synthetic CPU benchmark | declared device matrix + p95 end-to-end test |
@@ -69,4 +72,4 @@ Last known commit before this work: `56e8007`
 
 ## Recommended next session
 
-Next: replace target-as-enrollment/fallback evaluation with separate enrollment utterances and real ECAPA embeddings, then compare raw mixture, a declared standard-NS baseline, and Voca TSE. Do not implement online adaptation or public demo deployment yet.
+Next: after explicit model-weight approval, download the pinned ECAPA revision into `data/cache`, run its smoke/parity checks and train with separate enrollment utterances. Then compare raw mixture, a declared standard-NS baseline, and Voca TSE. Do not implement online adaptation or public demo deployment yet.

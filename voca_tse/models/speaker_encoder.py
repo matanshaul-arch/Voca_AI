@@ -5,6 +5,9 @@ import torch.nn.functional as F
 from typing import Optional
 
 
+ECAPA_VOXCELEB_REVISION = "0f99f2d0ebe89ac095bcc5903c4dd8f72b367286"
+
+
 @dataclass
 class SpeakerProfile:
     embedding: torch.Tensor
@@ -22,12 +25,16 @@ class SpeakerEncoderAdapter(nn.Module):
     """
 
     def __init__(self, embedding_dim: int = 192, sample_rate: int = 16000,
-                 backend: str = "fallback", pretrained_source: Optional[str] = None):
+                 backend: str = "fallback", pretrained_source: Optional[str] = None,
+                 pretrained_revision: Optional[str] = ECAPA_VOXCELEB_REVISION,
+                 cache_dir: Optional[str] = None):
         super().__init__()
         self.embedding_dim = embedding_dim
         self.sample_rate = sample_rate
         self.backend = backend
         self.pretrained_source = pretrained_source or "speechbrain/spkrec-ecapa-voxceleb"
+        self.pretrained_revision = pretrained_revision
+        self.cache_dir = cache_dir
         self.ecapa = None
         if backend == "ecapa":
             self._load_ecapa()
@@ -42,12 +49,22 @@ class SpeakerEncoderAdapter(nn.Module):
     def _load_ecapa(self):
         try:
             from speechbrain.inference.speaker import EncoderClassifier
+            from speechbrain.utils.fetching import FetchConfig, LocalStrategy
         except ImportError as exc:
             raise ImportError(
                 "ECAPA backend requires optional dependency 'speechbrain'. "
                 "Install it in the project venv; fallback backend remains available."
             ) from exc
-        self.ecapa = EncoderClassifier.from_hparams(source=self.pretrained_source)
+        fetch_config = FetchConfig(
+            revision=self.pretrained_revision,
+            huggingface_cache_dir=self.cache_dir,
+        )
+        self.ecapa = EncoderClassifier.from_hparams(
+            source=self.pretrained_source,
+            savedir=self.cache_dir,
+            fetch_config=fetch_config,
+            local_strategy=LocalStrategy.COPY,
+        )
         self.ecapa.eval()
 
     def _encode_ecapa(self, audio: torch.Tensor) -> torch.Tensor:

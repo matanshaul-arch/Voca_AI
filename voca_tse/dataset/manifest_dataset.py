@@ -24,5 +24,6 @@ class ManifestTSEDataset(Dataset):
             "mixture": load_wav(root / record["mixture"], self.sample_rate),
             "target": load_wav(root / record["target"], self.sample_rate),
             "interferer": load_wav(root / record["interferer"], self.sample_rate),
+            "enrollment": load_wav(root / record.get("enrollment", record["target"]), self.sample_rate),
             "metadata": record,
         }

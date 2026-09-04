@@ -22,12 +22,16 @@ def main():
     parser.add_argument("--epochs", type=int, default=2)
     parser.add_argument("--batch-size", type=int, default=2)
     parser.add_argument("--backend", choices=["fallback", "ecapa"], default="fallback")
+    parser.add_argument("--ecapa-cache", default="data/cache/ecapa-voxceleb")
     parser.add_argument("--output", default="checkpoints/manifest-baseline.pt")
     args = parser.parse_args()
     device = "cuda" if torch.cuda.is_available() else "cpu"
     dataset = ManifestTSEDataset(args.manifest)
     loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, collate_fn=collate_tse)
-    encoder = SpeakerEncoderAdapter(backend=args.backend).to(device).eval()
+    encoder = SpeakerEncoderAdapter(
+        backend=args.backend,
+        cache_dir=args.ecapa_cache if args.backend == "ecapa" else None,
+    ).to(device).eval()
     model = DualConditioningSeparator().to(device)
     optimizer = Adam(model.parameters(), lr=1e-3)
     loss_fn = ContrastiveTSELoss(encoder, lambda_contrastive=0.0, lambda_leakage=0.0)
@@ -36,10 +40,11 @@ def main():
         for batch in loader:
             mixture = batch["mixture"].to(device)
             target = batch["target"].to(device)
+            enrollment = batch["enrollment"].to(device)
             lengths = batch["lengths"].to(device)
             mixture, target = masked(mixture, lengths), masked(target, lengths)
             with torch.no_grad():
-                embedding = encoder(target)
+                embedding = encoder(enrollment)
             estimate = model(mixture, embedding)
             loss = loss_fn(target, estimate)
             optimizer.zero_grad(set_to_none=True); loss.backward()

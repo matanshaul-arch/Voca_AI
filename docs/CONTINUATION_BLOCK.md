@@ -45,10 +45,14 @@ Latest real-data work:
 - `voca_real_v1` has 308 train / 40 valid / 36 test records and zero speaker overlap across target or interferer roles.
 - The split utility now keeps connected target/interferer speaker groups together.
 - One fallback-encoder epoch reached mean loss 0.4127. Test SI-SDR improved by 0.26 dB and interferer projection suppression was 5.40 dB. The local checkpoint and output are Git-ignored.
-- This is pipeline evidence, not a product-quality result: enrollment currently uses each target clip itself and the standard-NS comparator is still absent.
+- The first reported +0.26 dB result used target-as-enrollment and remains pipeline evidence only; it must be replaced by the separate-enrollment ECAPA run. The standard-NS comparator is also still absent.
+- A project-local CPython 3.11.16 environment now exists at `.venv311`; the legacy `.venv` is Python 3.9.6 and should not be used for new experiments.
+- `voca_real_v1` was regenerated with a separate enrollment utterance for every target; loader, collate, training and evaluation now consume it.
+- ECAPA is pinned to revision `0f99f2d0ebe89ac095bcc5903c4dd8f72b367286` and configured for project-local cache/copies. Weights were not downloaded because explicit weight approval is still required.
+- `scripts/preflight.py` passes under Python 3.11.16; PyTorch reports CPU-only and no MPS support in this standalone runtime.
 
 Current unfinished priority table:
 T01 production ECAPA review and real-ECAPA training; T02 broader/product dataset review; T03 manifest scale-up and separate enrollment references; T04 quality training plus raw/standard-NS comparison; T05 complex STFT baseline; T06 strict causality; T07 confidence head; T08 ONNX FP16; T09 INT8; T10 AudioWorklet/WASM; T11 WebRTC integration; T12 human MOS; T13 WER evaluation; T14 privacy/profile lifecycle; T15 hard-negative mining; T16 multi-mic spatial branch.
 
-Next action: add separate enrollment utterances and train/evaluate with the verified ECAPA backend; add a declared standard-noise-suppression comparator. Run tests, update status documents, commit with a focused message, and push only after explicit approval.
+Next action: obtain explicit approval for the pinned ECAPA weight download, then smoke-test and train/evaluate ECAPA with separate enrollment; add a declared standard-noise-suppression comparator. Run tests, update status documents, commit with a focused message, and push only after explicit approval.
 ```

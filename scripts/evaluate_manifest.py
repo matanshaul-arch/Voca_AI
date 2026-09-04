@@ -28,13 +28,17 @@ def main():
     parser.add_argument("manifest")
     parser.add_argument("checkpoint")
     parser.add_argument("--batch-size", type=int, default=4)
+    parser.add_argument("--ecapa-cache", default="data/cache/ecapa-voxceleb")
     parser.add_argument("--output")
     args = parser.parse_args()
 
     checkpoint = torch.load(args.checkpoint, map_location="cpu", weights_only=True)
     backend = checkpoint.get("encoder_backend", "fallback")
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    encoder = SpeakerEncoderAdapter(backend=backend).to(device).eval()
+    encoder = SpeakerEncoderAdapter(
+        backend=backend,
+        cache_dir=args.ecapa_cache if backend == "ecapa" else None,
+    ).to(device).eval()
     model = DualConditioningSeparator().to(device).eval()
     model.load_state_dict(checkpoint["model"])
     dataset = ManifestTSEDataset(args.manifest)
@@ -47,7 +51,8 @@ def main():
             mixture = masked(batch["mixture"].to(device), lengths)
             target = masked(batch["target"].to(device), lengths)
             interferer = masked(batch["interferer"].to(device), lengths)
-            embedding = encoder(target)
+            enrollment = batch["enrollment"].to(device)
+            embedding = encoder(enrollment)
             estimate = masked(model(mixture, embedding), lengths)
             raw_scores.extend(si_sdr(target, mixture).cpu().tolist())
             estimate_scores.extend(si_sdr(target, estimate).cpu().tolist())

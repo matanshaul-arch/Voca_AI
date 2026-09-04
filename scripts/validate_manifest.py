@@ -12,7 +12,8 @@ def main():
     args = parser.parse_args()
     required_metadata = {
         "target_speaker_id", "interferer_speaker_id", "source_dataset", "split",
-        "snr_db", "overlap_ratio", "rir_id", "license_status",
+        "snr_db", "overlap_ratio", "rir_id", "license_status", "enrollment",
+        "enrollment_source", "target_source", "interferer_source",
     }
     manifests = {}
     for manifest in args.manifest:
@@ -26,6 +27,10 @@ def main():
             for field in ("mixture", "target", "interferer"):
                 if not (root / record[field]).is_file():
                     raise FileNotFoundError(root / record[field])
+            if not (root / record["enrollment"]).is_file():
+                raise FileNotFoundError(root / record["enrollment"])
+            if record["enrollment_source"] == record["target_source"]:
+                raise ValueError("enrollment and target must use different source utterances")
         manifests[Path(manifest).stem] = records
 
     speaker_sets = {
