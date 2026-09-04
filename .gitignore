@@ -11,6 +11,7 @@ outputs/
 reports/
 data/raw/
 data/cache/
+data/cache/local-prototype/
 *.wav
 *.flac
 *.onnx

@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Voca AI · Local Prototype</title>
+<style>body{font:16px system-ui;max-width:720px;margin:3rem auto;padding:0 1rem;background:#10131a;color:#edf1f7}main{background:#1a202b;padding:2rem;border-radius:16px}label{display:block;margin:1rem 0 .35rem}input,button{font:inherit}button{margin-top:1.5rem;padding:.7rem 1rem}small,#status{color:#adb8c9}audio{width:100%;margin-top:1rem}</style>
+<main><h1>Voca AI</h1><p>Local-only experimental target-speaker extraction. Audio is processed on this device and temporary results can be deleted.</p>
+<label>Target speaker enrollment (WAV/FLAC)</label><input id="enrollment" type="file" accept="audio/*">
+<label>Mixture audio (WAV/FLAC)</label><input id="mixture" type="file" accept="audio/*"><br>
+<button id="run">Separate locally</button><p id="status">Choose two local audio files.</p><section id="result" hidden><h2>Separated audio</h2><audio id="audio" controls></audio><p id="metrics"></p><button id="reset">Delete temporary result</button></section><small>Experimental research prototype. It may attenuate the target or leave interfering speech; it is not a production-quality isolation claim.</small></main>
+<script>
+let jobId;
+const status=document.querySelector('#status'), result=document.querySelector('#result');
+document.querySelector('#run').onclick=async()=>{const e=enrollment.files[0],m=mixture.files[0];if(!e||!m){status.textContent='Select both files.';return}const f=new FormData();f.append('enrollment',e);f.append('mixture',m);status.textContent='Processing locally…';result.hidden=true;try{const r=await fetch('/api/separate',{method:'POST',body:f});const d=await r.json();if(!r.ok)throw Error(d.detail);jobId=d.job_id;audio.src=d.audio_url;metrics.textContent=`${d.duration_seconds.toFixed(2)}s audio · ${d.processing_seconds.toFixed(2)}s processing · RTF ${d.realtime_factor.toFixed(3)} · ${d.encoder_backend}`;result.hidden=false;status.textContent='Complete.'}catch(err){status.textContent=`Error: ${err.message}`}};
+document.querySelector('#reset').onclick=async()=>{if(jobId)await fetch(`/api/jobs/${jobId}`,{method:'DELETE'});audio.removeAttribute('src');result.hidden=true;status.textContent='Temporary result deleted.';jobId=null};
+</script></html>

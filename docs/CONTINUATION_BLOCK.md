@@ -44,6 +44,7 @@ Current completed state:
 - Causal review complete: the separator uses left-padded causal convolutions and per-timestep LayerNorm; an offline/streaming parity test passes. Batch padding is masked for enrollment and estimates.
 - Target-level loss calibration complete with fixed seed. On validation after one CPU epoch, `lambda_level=0.03` achieved +0.624 dB SI-SDR improvement, 5.67 dB interferer projection suppression and -1.52 dB target level delta. The 3-epoch run regressed target level to -8.63 dB, so longer training requires validation-based early stopping.
 - Test results used during the calibration are exploratory because that split was inspected before model selection. Create a fresh unseen challenge set before external quality claims.
+- Local prototype complete: `python -m voca_tse.app.api --checkpoint <local checkpoint>` starts a localhost-only UI. It validates/normalizes uploaded audio, creates the enrollment embedding in memory, writes only a temporary separated WAV under Git-ignored `data/cache/local-prototype/`, and supports deletion. It is explicitly experimental and has no live microphone, confidence head, cloud upload, persistent profile store or public deployment path.
 - Standard noise suppression comparator has not yet been implemented. UI/app has not yet been implemented.
 - Final validation passed: preflight, manifest validation, py_compile and 7 tests.
 

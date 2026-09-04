@@ -34,6 +34,7 @@ Latest recorded commit: `07d3aa3`
 | ECAPA real-speech run | Done, limited | Pinned revision; 1 epoch on CPU with separate enrollment; test SI-SDR improvement +0.515 dB and interferer projection suppression 23.61 dB |
 | Causal/level-loss review | Done | Causal padding and future-looking normalization fixed; enrollment/output padding masked; level-loss reporting corrected |
 | Level-loss calibration | Done, limited | Fixed-seed 1-epoch sweep selected `lambda_level=0.03` on validation: +0.624 dB SI-SDR, 5.67 dB suppression, -1.52 dB target level delta |
+| Local product prototype | Done, experimental | Localhost API/UI for enrollment, separation, playback/download and temporary-result deletion |
 
 ## Not started
 
