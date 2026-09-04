@@ -41,11 +41,13 @@ def main():
             mixture = batch["mixture"].to(device)
             target = batch["target"].to(device)
             enrollment = batch["enrollment"].to(device)
+            enrollment = masked(enrollment, batch["enrollment_lengths"].to(device))
             lengths = batch["lengths"].to(device)
             mixture, target = masked(mixture, lengths), masked(target, lengths)
             with torch.no_grad():
                 embedding = encoder(enrollment)
             estimate = model(mixture, embedding)
+            estimate = masked(estimate, lengths)
             loss = loss_fn(target, estimate)
             optimizer.zero_grad(set_to_none=True); loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0); optimizer.step()

@@ -14,6 +14,9 @@ class StreamingTSE:
         self.model = model.to(device).eval()
         self.profile_embedding = profile_embedding.to(device)
         self.context_samples = context_samples
+        required_context = getattr(model, "receptive_field", 0)
+        if context_samples < required_context:
+            raise ValueError(f"context_samples must be at least {required_context}")
         self.device = device
 
     def create_state(self):

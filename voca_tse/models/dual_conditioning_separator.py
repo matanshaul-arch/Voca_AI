@@ -14,6 +14,16 @@ class FiLM(nn.Module):
         return x * (1 + gamma.unsqueeze(-1)) + beta.unsqueeze(-1)
 
 
+class CausalConv1d(nn.Module):
+    def __init__(self, in_channels: int, out_channels: int, kernel_size: int, dilation: int):
+        super().__init__()
+        self.left_padding = (kernel_size - 1) * dilation
+        self.conv = nn.Conv1d(in_channels, out_channels, kernel_size, dilation=dilation)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.conv(F.pad(x, (self.left_padding, 0)))
+
+
 class DualConditioningSeparator(nn.Module):
     """Causal time-domain mask separator; negative embeddings are optional."""
 
@@ -21,12 +31,13 @@ class DualConditioningSeparator(nn.Module):
         super().__init__()
         self.in_proj = nn.Conv1d(1, channels, 1)
         self.film = FiLM(embedding_dim, channels)
+        self.receptive_field = sum(2 * (2 ** i) for i in range(blocks))
         layers = []
         for i in range(blocks):
             dilation = 2 ** i
             layers.extend([
-                nn.Conv1d(channels, channels, 3, padding=2 * dilation, dilation=dilation),
-                nn.GroupNorm(1, channels), nn.PReLU(),
+                CausalConv1d(channels, channels, 3, dilation),
+                nn.LayerNorm(channels), nn.PReLU(),
             ])
         self.backbone = nn.Sequential(*layers)
         self.mask_head = nn.Conv1d(channels, 1, 1)
@@ -44,8 +55,11 @@ class DualConditioningSeparator(nn.Module):
             neg = F.normalize(e_neg, dim=-1).mean(dim=1)
             inhibition = torch.sigmoid(self.neg_gate(neg)).unsqueeze(-1)
             x = x * (1.0 - negative_strength * inhibition)
-        # Cropping restores strict causality after dilated same-length convolutions.
-        x = self.backbone(x)
-        x = x[..., :mixture.shape[-1]]
+        for layer in self.backbone:
+            if isinstance(layer, nn.LayerNorm):
+                x = layer(x.transpose(1, 2)).transpose(1, 2)
+            else:
+                x = layer(x)
+        # LayerNorm is applied per timestep; unlike GroupNorm it cannot see future frames.
         mask = torch.sigmoid(self.mask_head(x))
         return (mixture * mask).squeeze(1)

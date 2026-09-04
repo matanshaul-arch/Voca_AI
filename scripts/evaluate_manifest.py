@@ -52,6 +52,7 @@ def main():
             target = masked(batch["target"].to(device), lengths)
             interferer = masked(batch["interferer"].to(device), lengths)
             enrollment = batch["enrollment"].to(device)
+            enrollment = masked(enrollment, batch["enrollment_lengths"].to(device))
             embedding = encoder(enrollment)
             estimate = masked(model(mixture, embedding), lengths)
             raw_scores.extend(si_sdr(target, mixture).cpu().tolist())
