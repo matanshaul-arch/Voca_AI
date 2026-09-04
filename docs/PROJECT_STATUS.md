@@ -31,6 +31,7 @@ Last known commit before this work: `56e8007`
 | Python 3.11 environment | Done | Project-local `.venv311`, CPython 3.11.16; provenance in `docs/LOCAL_ENVIRONMENT.md` |
 | Separate enrollment references | Done for `voca_real_v1` | Every record uses a different source utterance from the same target speaker |
 | Preflight command | Done | `scripts/preflight.py` checks runtime, manifests, leakage, sample shapes and enrollment separation |
+| ECAPA real-speech run | Done, limited | Pinned revision; 1 epoch on CPU with separate enrollment; test SI-SDR improvement +0.515 dB and interferer projection suppression 23.61 dB |
 
 ## Not started
 
@@ -39,7 +40,7 @@ Last known commit before this work: `56e8007`
 | T01 | Integrate real pretrained ECAPA-TDNN | P0 | Local integration done; production model revision/license record pending |
 | T02 | Import licensed speech/noise datasets | P0 | Baseline releases imported; broader/product datasets still require review |
 | T03 | Build speaker-disjoint train/validation/test manifests | P0 | `voca_real_v1` complete; scale-up pending |
-| T04 | Train on real speech mixtures | P0 | Initial fallback run complete; ECAPA run and quality improvement pending |
+| T04 | Train on real speech mixtures | P0 | Initial ECAPA run complete; target level loss requires calibration/AGC and longer training |
 | T05 | Add complex STFT mask baseline | P0 | evaluation protocol |
 | T06 | Make separator strictly causal | P0 | T05/model redesign |
 | T07 | Add confidence/uncertainty head | P0 | T04 |
@@ -72,4 +73,4 @@ Last known commit before this work: `56e8007`
 
 ## Recommended next session
 
-Next: after explicit model-weight approval, download the pinned ECAPA revision into `data/cache`, run its smoke/parity checks and train with separate enrollment utterances. Then compare raw mixture, a declared standard-NS baseline, and Voca TSE. Do not implement online adaptation or public demo deployment yet.
+Next: add target-level preservation/anti-collapse loss, train longer with ECAPA, and implement a declared standard-NS comparator. The current ECAPA result improves SI-SDR but has target level delta -19.91 dB. Do not implement online adaptation or public demo deployment yet.

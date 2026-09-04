@@ -50,9 +50,10 @@ Latest real-data work:
 - `voca_real_v1` was regenerated with a separate enrollment utterance for every target; loader, collate, training and evaluation now consume it.
 - ECAPA is pinned to revision `0f99f2d0ebe89ac095bcc5903c4dd8f72b367286` and configured for project-local cache/copies. Weights were not downloaded because explicit weight approval is still required.
 - `scripts/preflight.py` passes under Python 3.11.16; PyTorch reports CPU-only and no MPS support in this standalone runtime.
+- ECAPA smoke test and one-epoch real-speech run completed with separate enrollment. Test SI-SDR improvement was +0.515 dB and interferer projection suppression 23.61 dB, but target level delta was -19.91 dB; target-preservation calibration is required.
 
 Current unfinished priority table:
 T01 production ECAPA review and real-ECAPA training; T02 broader/product dataset review; T03 manifest scale-up and separate enrollment references; T04 quality training plus raw/standard-NS comparison; T05 complex STFT baseline; T06 strict causality; T07 confidence head; T08 ONNX FP16; T09 INT8; T10 AudioWorklet/WASM; T11 WebRTC integration; T12 human MOS; T13 WER evaluation; T14 privacy/profile lifecycle; T15 hard-negative mining; T16 multi-mic spatial branch.
 
-Next action: obtain explicit approval for the pinned ECAPA weight download, then smoke-test and train/evaluate ECAPA with separate enrollment; add a declared standard-noise-suppression comparator. Run tests, update status documents, commit with a focused message, and push only after explicit approval.
+Next action: add target-level preservation/anti-collapse loss, train longer with ECAPA, and add a declared standard-noise-suppression comparator. Run tests, update status documents, commit with a focused message, and push only after explicit approval.
 ```
