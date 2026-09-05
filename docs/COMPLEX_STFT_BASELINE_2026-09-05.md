@@ -56,6 +56,19 @@ listening checks.
 
 ## Decision
 
-Keep the implementation as a comparison baseline. Continue model improvement
-on the existing ECAPA path first, then run a matched Complex STFT experiment
-with validation early stopping before making an architecture decision.
+Keep the implementation as a comparison baseline. A first matched ECAPA run
+was completed using the same `lambda_level=0.03`, validation manifest and
+early-stopping machinery:
+
+| Metric | Matched Complex STFT / ECAPA |
+|---|---:|
+| SI-SDR improvement | -0.0297 dB |
+| Interferer projection suppression | 0.0419 dB |
+| Target level delta | +3.2792 dB |
+
+This one-epoch result is not competitive and shows harmful target-level gain.
+It should not replace the selected time-domain checkpoint. Before abandoning
+the architecture, run a validation-gated experiment with a better spectral
+loss/target-mask objective and inspect artifacts; if the target-level problem
+persists, freeze this path and prioritize the time-domain model plus
+confidence-aware bypass.

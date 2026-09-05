@@ -7,6 +7,7 @@
 - It remains the product-prototype checkpoint: +0.9866 dB SI-SDR improvement, 6.5960 dB interferer suppression, -1.6642 dB target level delta on 36 test records.
 - Complex STFT baseline is implemented as an offline, centered-STFT model. It is not causal or production-ready.
 - Complex STFT one-epoch fallback run: +0.3881 dB SI-SDR improvement, 7.6939 dB suppression, -3.1864 dB target level delta.
+- Matched one-epoch ECAPA/Complex-STFT run with validation machinery: -0.0297 dB SI-SDR improvement, 0.0419 dB suppression, +3.2792 dB target level delta; currently non-competitive and shows target-level gain.
 - Preflight passed and 12/12 tests passed.
 - Chen recordings have not yet been supplied. When available, use `docs/CHEN_TEACHES_UX_CAPTURE.md`; store anonymous audio only under Git-ignored `data/raw/chen_teaches/`.
 
@@ -61,7 +62,7 @@ Sources: Krisp [Voice Isolation](https://sdk-docs.krisp.ai/docs/models-for-conve
 
 ## Recommended next session order
 
-1. Run matched Complex STFT versus ECAPA experiments with validation early stopping.
+1. Review Complex STFT objective/target-level behavior; either run one validation-gated improved spectral experiment or freeze this path.
 2. Create the fresh unseen challenge set.
 3. If Chen recordings arrive, run the nine-scenario local UX/quality capture.
 4. Build Confidence Head and safe bypass policy.
@@ -79,7 +80,7 @@ This session had good scope discipline: the baseline was re-measured before impl
 
 גבול קשיח: כל shell, קריאה, כתיבה, עריכה והרצה רק בתוך /Users/matanshaul/Projects/Voca_AI. שמור על העבודה. אין force-push ואין שינוי היסטוריית Git.
 
-מצב: checkpoint נבחר מקומי checkpoints/voca-real-v1-ecapa-l03-early-stop.pt; תוצאה על 36 test records: +0.9866 dB SI-SDR improvement, 6.5960 dB suppression, -1.6642 dB target level delta. Complex STFT offline baseline הוטמע ונבדק ב-run ראשון: +0.3881 dB SI-SDR improvement, 7.6939 dB suppression, -3.1864 dB target level delta. 12/12 בדיקות ו-preflight עברו. Chen recordings עדיין לא סופקו.
+מצב: checkpoint נבחר מקומי checkpoints/voca-real-v1-ecapa-l03-early-stop.pt; תוצאה על 36 test records: +0.9866 dB SI-SDR improvement, 6.5960 dB suppression, -1.6642 dB target level delta. Complex STFT offline baseline הוטמע ונבדק. ה-run המותאם עם ECAPA, validation ו-early stopping השיג -0.0297 dB SI-SDR improvement, 0.0419 dB suppression, +3.2792 dB target level delta ולכן אינו תחרותי כרגע. 12/12 בדיקות ו-preflight עברו. Chen recordings עדיין לא סופקו.
 
 משימות פתוחות/חלקיות: T01 ECAPA production review; T02 הרחבת datasets; T03 challenge set ו-manifests; T04 real-speech training; T05 Complex STFT matched validation; T07 Confidence Head; T08 ONNX; T09 INT8; T10 WASM; T11 WebRTC; T12 MOS; T13 WER; T14 privacy/profile lifecycle; T15 hard negatives; T16 multi-mic; T17 turn-taking API; T18 Teach Mode; T19 Voice Quality Monitor; T20 anti-spoofing; T21 observability/model registry; T22 consent/admin.
 
@@ -87,5 +88,5 @@ This session had good scope discipline: the baseline was re-measured before impl
 
 סדר המשך: matched STFT/ECAPA validation → fresh unseen challenge set → Chen UX capture אם ההקלטות הגיעו → Confidence Head → Voice Quality Monitor → MOS/UX/WER → החלטת Teach Mode מול quality monitoring מול model improvement.
 
-התחל תמיד ב-git status --short --branch וב-git log -1 --oneline. בסיום עדכן את מסמכי הסטטוס וה-handoff, הרץ preflight ו-pytest, ושמור audio/checkpoints/cache מחוץ ל-Git.
+התחל תמיד ב-git status --short --branch וב-git log -1 --oneline. המשימה הבאה: לבדוק objective/target-level של Complex STFT; לבצע לכל היותר ניסוי validation-gated משופר אחד, או להקפיא את הכיוון ולעבור ל-Confidence Head. בסיום עדכן את מסמכי הסטטוס וה-handoff, הרץ preflight ו-pytest, ושמור audio/checkpoints/cache מחוץ ל-Git.
 ```

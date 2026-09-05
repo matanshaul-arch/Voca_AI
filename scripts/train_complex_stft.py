@@ -8,6 +8,7 @@ from torch.optim import Adam
 from torch.utils.data import DataLoader
 from voca_tse.dataset import ManifestTSEDataset, collate_tse
 from voca_tse.models import ComplexSTFTSeparator, SpeakerEncoderAdapter
+from voca_tse.losses import ContrastiveTSELoss
 
 
 def masked(x, lengths):
@@ -23,6 +24,9 @@ def main():
     parser.add_argument("--backend", choices=["fallback", "ecapa"], default="fallback")
     parser.add_argument("--ecapa-cache", default="data/cache/ecapa-voxceleb")
     parser.add_argument("--learning-rate", type=float, default=1e-3)
+    parser.add_argument("--validation-manifest")
+    parser.add_argument("--patience", type=int, default=2)
+    parser.add_argument("--lambda-level", type=float, default=0.03)
     parser.add_argument("--seed", type=int, default=20260905)
     parser.add_argument("--output", default="checkpoints/complex-stft-baseline.pt")
     args = parser.parse_args()
@@ -30,9 +34,14 @@ def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     dataset = ManifestTSEDataset(args.manifest)
     loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, collate_fn=collate_tse)
+    validation_loader = None if not args.validation_manifest else DataLoader(
+        ManifestTSEDataset(args.validation_manifest), batch_size=args.batch_size, collate_fn=collate_tse)
     encoder = SpeakerEncoderAdapter(backend=args.backend, cache_dir=args.ecapa_cache if args.backend == "ecapa" else None).to(device).eval()
     model = ComplexSTFTSeparator().to(device)
     optimizer = Adam(model.parameters(), lr=args.learning_rate)
+    loss_fn = ContrastiveTSELoss(encoder, lambda_contrastive=0.0,
+                                 lambda_leakage=0.0, lambda_level=args.lambda_level)
+    best_loss, best_epoch, stale_epochs = float("inf"), 0, 0
     for epoch in range(1, args.epochs + 1):
         model.train(); total = 0.0
         for batch in loader:
@@ -43,14 +52,41 @@ def main():
             with torch.no_grad():
                 embedding = encoder(enrollment)
             estimate = masked(model(mixture, embedding), lengths)
-            loss = (estimate - target).square().sum() / lengths.sum().clamp_min(1)
+            loss = loss_fn(target, estimate)
             optimizer.zero_grad(set_to_none=True); loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0); optimizer.step()
             total += float(loss.detach())
-        print(f"epoch={epoch} waveform_mse={total / max(1, len(loader)):.6f}")
+        train_loss = total / max(1, len(loader))
+        validation_loss = train_loss
+        if validation_loader is not None:
+            model.eval(); validation_total = 0.0
+            with torch.no_grad():
+                for batch in validation_loader:
+                    lengths = batch["lengths"].to(device)
+                    mixture = masked(batch["mixture"].to(device), lengths)
+                    target = masked(batch["target"].to(device), lengths)
+                    enrollment = masked(batch["enrollment"].to(device), batch["enrollment_lengths"].to(device))
+                    estimate = masked(model(mixture, encoder(enrollment)), lengths)
+                    validation_total += float(loss_fn(target, estimate))
+            validation_loss = validation_total / max(1, len(validation_loader))
+        print(f"epoch={epoch} train_loss={train_loss:.6f} validation_loss={validation_loss:.6f}")
+        if validation_loss < best_loss:
+            best_loss, best_epoch, stale_epochs = validation_loss, epoch, 0
+            output = Path(args.output); output.parent.mkdir(parents=True, exist_ok=True)
+            torch.save({"model": model.state_dict(), "encoder_backend": args.backend, "seed": args.seed,
+                        "lambda_level": args.lambda_level, "best_epoch": best_epoch,
+                        "validation_loss": best_loss, "n_fft": model.n_fft,
+                        "hop_length": model.hop_length, "win_length": model.win_length}, output)
+        elif validation_loader is not None:
+            stale_epochs += 1
+            if stale_epochs >= args.patience:
+                print(f"early_stop=epoch_{epoch} best_epoch={best_epoch}")
+                break
     output = Path(args.output); output.parent.mkdir(parents=True, exist_ok=True)
-    torch.save({"model": model.state_dict(), "encoder_backend": args.backend, "seed": args.seed,
-                "n_fft": model.n_fft, "hop_length": model.hop_length, "win_length": model.win_length}, output)
+    if not output.exists():
+        torch.save({"model": model.state_dict(), "encoder_backend": args.backend, "seed": args.seed,
+                    "lambda_level": args.lambda_level, "n_fft": model.n_fft,
+                    "hop_length": model.hop_length, "win_length": model.win_length}, output)
     print(f"saved={output} device={device} records={len(dataset)}")
 
 

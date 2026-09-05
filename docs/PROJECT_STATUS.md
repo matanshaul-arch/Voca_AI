@@ -41,6 +41,7 @@ Latest recorded commit: see `git log -1 --oneline`
 | Market positioning refresh | Done | Generic NC/BVC is table stakes; Voca differentiates through consented Teacher Lock, explainable quality and local-first classroom workflow |
 | Quantitative baseline refresh | Done | 36-record test evaluation of selected ECAPA checkpoint: +0.9866 dB SI-SDR improvement, 6.5960 dB suppression, -1.6642 dB target level delta |
 | Complex STFT baseline | Done, limited | Offline speaker-conditioned complex mask; one-epoch fallback run: +0.3881 dB SI-SDR improvement, 7.6939 dB suppression, -3.1864 dB target level delta; details in `docs/COMPLEX_STFT_BASELINE_2026-09-05.md` |
+| Matched Complex STFT validation | Done, limited | ECAPA + validation/early stopping run: -0.0297 dB SI-SDR improvement, 0.0419 dB suppression, +3.2792 dB target level delta; objective review required |
 | Final session validation | Done | Preflight passed; 12 tests passed; new scripts compile successfully |
 
 ## Not started
@@ -51,7 +52,7 @@ Latest recorded commit: see `git log -1 --oneline`
 | T02 | Import licensed speech/noise datasets | P0 | Baseline releases imported; broader/product datasets still require review |
 | T03 | Build speaker-disjoint train/validation/test manifests | P0 | `voca_real_v1` complete; scale-up pending |
 | T04 | Train on real speech mixtures | P0 | Controlled early-stopped ECAPA candidate complete; fresh unseen challenge set and broader training remain |
-| T05 | Add complex STFT mask baseline | Done, limited | Offline baseline implemented; matched ECAPA training and validation remain |
+| T05 | Add complex STFT mask baseline | Done, limited | Offline baseline implemented; matched ECAPA/validation run is non-competitive and needs objective/loss review |
 | T06 | Make separator strictly causal | Done | CausalConv1d + per-timestep LayerNorm; parity test and streaming benchmark pass |
 | T07 | Add confidence/uncertainty head | P0 | T04 |
 | T08 | ONNX FP16 export and parity tests | P1 | T06 |
