@@ -38,6 +38,7 @@ Latest recorded commit: `07d3aa3`
 | Validation early stopping | Done | Training saves the lowest validation-loss checkpoint and stops after configurable patience |
 | Standard NS comparator | Done, limited | Declared offline spectral-subtraction baseline; test SI-SDR change -0.722 dB, suppression 0.06 dB |
 | Controlled ECAPA training | Done, limited | Early stopping selected epoch 2/4: test +0.987 dB SI-SDR, 6.60 dB suppression, -1.66 dB target level delta |
+| Market positioning refresh | Done | Generic NC/BVC is table stakes; Voca differentiates through consented Teacher Lock, explainable quality and local-first classroom workflow |
 
 ## Not started
 

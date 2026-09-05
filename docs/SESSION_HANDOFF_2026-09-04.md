@@ -5,7 +5,7 @@
 - Git remote: `https://github.com/matanshaul-arch/Voca_AI.git`; branch `main`.
 - The local prototype was added in commit `fca7abe`; run `git log -1 --oneline` before continuing to confirm the current tip.
 - The prototype is local-only at `http://127.0.0.1:8000`; it accepts enrollment and mixture audio, creates a temporary output WAV under Git-ignored `data/cache/local-prototype/`, and supports deletion.
-- To start it: `.venv311/bin/python -m voca_tse.app.api --checkpoint checkpoints/sweep-l03.pt`.
+- To start it: `.venv311/bin/python -m voca_tse.app.api --checkpoint checkpoints/voca-real-v1-ecapa-l03-early-stop.pt`.
 - It is an experimental research tool. It does not have confidence estimation, live microphone input, cloud upload, persistent profiles, WebRTC, or public-deployment readiness.
 - Model selection: a fixed-seed one-epoch validation sweep selected `lambda_level=0.03` (+0.624 dB SI-SDR improvement, 5.67 dB interferer suppression, -1.52 dB target-level delta). A 3-epoch run regressed target level to -8.63 dB; do not use longer training without validation-based early stopping.
 - Causality is now verified by test; streaming benchmark was 0.677 ms/chunk on CPU. Last validation passed: preflight and 10 tests.
