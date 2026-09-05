@@ -1,5 +1,10 @@
 # Copy/paste continuation block
 
+הבלוק המלא והעדכני נמצא ב־`docs/SESSION_HANDOFF_2026-09-05.md` תחת הכותרת
+“Copy this exact block into a new session”. יש להעתיק משם את כל הטקסט ללא שינוי.
+
+הבלוק הקודם במסמך זה הוחלף משום שכלל מצב היסטורי מלפני משימות baseline ו־Complex STFT.
+
 Copy the text below into a new Codex session:
 
 ```text
