@@ -35,6 +35,8 @@ Latest recorded commit: `07d3aa3`
 | Causal/level-loss review | Done | Causal padding and future-looking normalization fixed; enrollment/output padding masked; level-loss reporting corrected |
 | Level-loss calibration | Done, limited | Fixed-seed 1-epoch sweep selected `lambda_level=0.03` on validation: +0.624 dB SI-SDR, 5.67 dB suppression, -1.52 dB target level delta |
 | Local product prototype | Done, experimental | Localhost API/UI for enrollment, separation, playback/download and temporary-result deletion |
+| Validation early stopping | Done | Training saves the lowest validation-loss checkpoint and stops after configurable patience |
+| Standard NS comparator | Done, limited | Declared offline spectral-subtraction baseline; test SI-SDR change -0.722 dB, suppression 0.06 dB |
 
 ## Not started
 
@@ -43,8 +45,8 @@ Latest recorded commit: `07d3aa3`
 | T01 | Integrate real pretrained ECAPA-TDNN | P0 | Local integration done; production model revision/license record pending |
 | T02 | Import licensed speech/noise datasets | P0 | Baseline releases imported; broader/product datasets still require review |
 | T03 | Build speaker-disjoint train/validation/test manifests | P0 | `voca_real_v1` complete; scale-up pending |
-| T04 | Train on real speech mixtures | P0 | Initial ECAPA run and level-loss calibration complete; add validation-based early stopping before longer training |
-| T05 | Add complex STFT mask baseline | P0 | evaluation protocol |
+| T04 | Train on real speech mixtures | P0 | Early stopping complete; run a controlled ECAPA training study and fresh challenge set |
+| T05 | Add complex STFT mask baseline | P0 | Standard NS comparator complete; learned complex-mask baseline remains |
 | T06 | Make separator strictly causal | Done | CausalConv1d + per-timestep LayerNorm; parity test and streaming benchmark pass |
 | T07 | Add confidence/uncertainty head | P0 | T04 |
 | T08 | ONNX FP16 export and parity tests | P1 | T06 |
