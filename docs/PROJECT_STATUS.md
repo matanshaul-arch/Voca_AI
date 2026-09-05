@@ -57,7 +57,7 @@ Latest recorded commit: `07d3aa3`
 | T15 | Hard-negative mining and multi-negative conditioning | P1 | T04 |
 | T16 | Multi-microphone spatial branch | P2 | hardware test setup |
 | T17 | Turn-taking event API | P1 | T07 |
-| T18 | Teach/classroom mode | P1 | T17 |
+| T18 | Teach/classroom mode | P1 | Capture protocol ready; consented UX/quality capture pending |
 | T19 | Voice quality monitor | P0 | T07 |
 | T20 | Anti-spoofing/replay detection | P2 | T01 |
 | T21 | Observability and model registry | P1 | T04 |
@@ -76,4 +76,4 @@ Latest recorded commit: `07d3aa3`
 
 ## Recommended next session
 
-Next: run a local usability capture for the "Chen teaches" scenario using the experimental prototype. Before any public deployment, add validation-based early stopping, a standard-NS comparator, confidence controls and a fresh unseen challenge set. The 3-epoch experiment regressed target level to -8.63 dB, so do not adopt longer training without early stopping.
+Next: run the consented "Chen teaches" UX/quality capture using `docs/CHEN_TEACHES_UX_CAPTURE.md`. Before any public deployment, add validation-based early stopping, a standard-NS comparator, confidence controls and a fresh unseen challenge set. The 3-epoch experiment regressed target level to -8.63 dB, so do not adopt longer training without early stopping.

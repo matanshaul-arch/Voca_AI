@@ -1,0 +1,2 @@
+clip_id,scenario,enrollment_id,device,room,target_distance_m,interferer_distance_m,overlap_seconds,consent_confirmed,target_preservation_1_to_5,interferer_attenuation_1_to_5,artifacts,useful_yes_maybe_no,ux_clear_yes_no,failure_category,notes
+chen_clean_01,clean_lesson,chen_enroll_01,,,,,0,yes,,,,,,, 
