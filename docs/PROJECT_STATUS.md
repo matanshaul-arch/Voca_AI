@@ -37,6 +37,7 @@ Latest recorded commit: `07d3aa3`
 | Local product prototype | Done, experimental | Localhost API/UI for enrollment, separation, playback/download and temporary-result deletion |
 | Validation early stopping | Done | Training saves the lowest validation-loss checkpoint and stops after configurable patience |
 | Standard NS comparator | Done, limited | Declared offline spectral-subtraction baseline; test SI-SDR change -0.722 dB, suppression 0.06 dB |
+| Controlled ECAPA training | Done, limited | Early stopping selected epoch 2/4: test +0.987 dB SI-SDR, 6.60 dB suppression, -1.66 dB target level delta |
 
 ## Not started
 
@@ -45,7 +46,7 @@ Latest recorded commit: `07d3aa3`
 | T01 | Integrate real pretrained ECAPA-TDNN | P0 | Local integration done; production model revision/license record pending |
 | T02 | Import licensed speech/noise datasets | P0 | Baseline releases imported; broader/product datasets still require review |
 | T03 | Build speaker-disjoint train/validation/test manifests | P0 | `voca_real_v1` complete; scale-up pending |
-| T04 | Train on real speech mixtures | P0 | Early stopping complete; run a controlled ECAPA training study and fresh challenge set |
+| T04 | Train on real speech mixtures | P0 | Controlled early-stopped ECAPA candidate complete; fresh unseen challenge set and broader training remain |
 | T05 | Add complex STFT mask baseline | P0 | Standard NS comparator complete; learned complex-mask baseline remains |
 | T06 | Make separator strictly causal | Done | CausalConv1d + per-timestep LayerNorm; parity test and streaming benchmark pass |
 | T07 | Add confidence/uncertainty head | P0 | T04 |
@@ -78,4 +79,4 @@ Latest recorded commit: `07d3aa3`
 
 ## Recommended next session
 
-Next: run the consented "Chen teaches" UX/quality capture using `docs/CHEN_TEACHES_UX_CAPTURE.md`. Before any public deployment, add validation-based early stopping, a standard-NS comparator, confidence controls and a fresh unseen challenge set. The 3-epoch experiment regressed target level to -8.63 dB, so do not adopt longer training without early stopping.
+Next: wait for the consented "Chen teaches" recordings, then run the UX/quality capture using `docs/CHEN_TEACHES_UX_CAPTURE.md` and checkpoint `checkpoints/voca-real-v1-ecapa-l03-early-stop.pt`. Before any public deployment, add confidence controls and a fresh unseen challenge set.

@@ -10,6 +10,7 @@
 - Model selection: a fixed-seed one-epoch validation sweep selected `lambda_level=0.03` (+0.624 dB SI-SDR improvement, 5.67 dB interferer suppression, -1.52 dB target-level delta). A 3-epoch run regressed target level to -8.63 dB; do not use longer training without validation-based early stopping.
 - Causality is now verified by test; streaming benchmark was 0.677 ms/chunk on CPU. Last validation passed: preflight and 10 tests.
 - Training supports `--validation-manifest` and `--patience`; it saves the best validation-loss checkpoint. A fallback smoke run stopped after epoch 2 and retained epoch 1. `scripts/evaluate_standard_ns.py` is the declared offline spectral-subtraction comparator; it is not speaker-conditioned and performed poorly on the current test set (-0.722 dB SI-SDR improvement, 0.06 dB suppression).
+- Controlled ECAPA run: `lambda_level=0.03`, 8-epoch cap, patience 2; early stopping selected epoch 2 of 4 (`validation_loss=0.1138`). Exploratory test result: +0.987 dB SI-SDR improvement, 6.60 dB interferer suppression, -1.66 dB target-level delta. Use local checkpoint `checkpoints/voca-real-v1-ecapa-l03-early-stop.pt` for the Chen capture.
 
 ## Chen teaches — recording plan
 
