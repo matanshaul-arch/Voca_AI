@@ -43,6 +43,8 @@ Latest recorded commit: see `git log -1 --oneline`
 | Complex STFT baseline | Done, limited | Offline speaker-conditioned complex mask; one-epoch fallback run: +0.3881 dB SI-SDR improvement, 7.6939 dB suppression, -3.1864 dB target level delta; details in `docs/COMPLEX_STFT_BASELINE_2026-09-05.md` |
 | Matched Complex STFT validation | Done, limited | ECAPA + validation/early stopping run: -0.0297 dB SI-SDR improvement, 0.0419 dB suppression, +3.2792 dB target level delta; objective review required |
 | Final session validation | Done | Preflight passed; 12 tests passed; new scripts compile successfully |
+| Challenge set architecture | Done, design only | Immutable unseen challenge-set schema, strata, split rules and evaluation gates documented |
+| Confidence Head architecture | Done, design only | Feature groups, outputs, bypass policy, calibration and acceptance gates documented |
 
 ## Not started
 
@@ -50,11 +52,11 @@ Latest recorded commit: see `git log -1 --oneline`
 |---|---|---:|---|
 | T01 | Integrate real pretrained ECAPA-TDNN | P0 | Local integration done; production model revision/license record pending |
 | T02 | Import licensed speech/noise datasets | P0 | Baseline releases imported; broader/product datasets still require review |
-| T03 | Build speaker-disjoint train/validation/test manifests | P0 | `voca_real_v1` complete; scale-up pending |
+| T03 | Build speaker-disjoint train/validation/test manifests | Partial | `voca_real_v1` complete; fresh immutable challenge-set implementation pending |
 | T04 | Train on real speech mixtures | P0 | Controlled early-stopped ECAPA candidate complete; fresh unseen challenge set and broader training remain |
 | T05 | Add complex STFT mask baseline | Done, limited | Offline baseline implemented; matched ECAPA/validation run is non-competitive and needs objective/loss review |
 | T06 | Make separator strictly causal | Done | CausalConv1d + per-timestep LayerNorm; parity test and streaming benchmark pass |
-| T07 | Add confidence/uncertainty head | P0 | T04 |
+| T07 | Add confidence/uncertainty head | Design complete, implementation pending | T04 + stable checkpoint |
 | T08 | ONNX FP16 export and parity tests | P1 | T06 |
 | T09 | INT8 calibration/QAT study | P1 | T08 |
 | T10 | Web AudioWorklet/WASM integration | P1 | T08 |
@@ -84,4 +86,4 @@ Latest recorded commit: see `git log -1 --oneline`
 
 ## Recommended next session
 
-Next: wait for the consented "Chen teaches" recordings, then run the UX/quality capture using `docs/CHEN_TEACHES_UX_CAPTURE.md` and checkpoint `checkpoints/voca-real-v1-ecapa-l03-early-stop.pt`. Before any public deployment, add confidence controls and a fresh unseen challenge set.
+Next: implement and freeze the fresh unseen challenge set, then implement and calibrate the Confidence Head. When consented "Chen teaches" recordings arrive, run the UX/quality capture using `docs/CHEN_TEACHES_UX_CAPTURE.md`. Before any public deployment, require confidence controls and the frozen challenge set.

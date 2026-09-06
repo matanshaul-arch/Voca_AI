@@ -62,12 +62,11 @@ Sources: Krisp [Voice Isolation](https://sdk-docs.krisp.ai/docs/models-for-conve
 
 ## Recommended next session order
 
-1. Review Complex STFT objective/target-level behavior; either run one validation-gated improved spectral experiment or freeze this path.
-2. Create the fresh unseen challenge set.
+1. Implement and freeze the fresh unseen challenge set according to `docs/CHALLENGE_AND_CONFIDENCE_ARCHITECTURE_2026-09-06.md`.
+2. Implement and calibrate the Confidence Head and safe bypass policy.
 3. If Chen recordings arrive, run the nine-scenario local UX/quality capture.
-4. Build Confidence Head and safe bypass policy.
-5. Build Voice Quality Monitor and human/MOS/UX validation.
-6. Decide between Teach Mode, quality monitoring, or additional model/data work.
+4. Build Voice Quality Monitor and human/MOS/UX validation.
+5. Decide between Teach Mode, quality monitoring, or additional model/data work.
 
 ## Session quality review
 
