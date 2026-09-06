@@ -1,6 +1,6 @@
 # Voca AI — End-of-Day Project Status
 
-Date: 2026-09-05
+Date: 2026-09-06
 Branch: `main`  
 Latest recorded commit: see `git log -1 --oneline`
 
@@ -52,11 +52,11 @@ Latest recorded commit: see `git log -1 --oneline`
 |---|---|---:|---|
 | T01 | Integrate real pretrained ECAPA-TDNN | P0 | Local integration done; production model revision/license record pending |
 | T02 | Import licensed speech/noise datasets | P0 | Baseline releases imported; broader/product datasets still require review |
-| T03 | Build speaker-disjoint train/validation/test manifests | Partial | `voca_real_v1` complete; fresh immutable challenge-set implementation pending |
+| T03 | Build speaker-disjoint train/validation/test manifests | Architecture complete, implementation pending | `voca_real_v1` complete; fresh immutable challenge-set generator and freeze pending |
 | T04 | Train on real speech mixtures | P0 | Controlled early-stopped ECAPA candidate complete; fresh unseen challenge set and broader training remain |
 | T05 | Add complex STFT mask baseline | Done, limited | Offline baseline implemented; matched ECAPA/validation run is non-competitive and needs objective/loss review |
 | T06 | Make separator strictly causal | Done | CausalConv1d + per-timestep LayerNorm; parity test and streaming benchmark pass |
-| T07 | Add confidence/uncertainty head | Design complete, implementation pending | T04 + stable checkpoint |
+| T07 | Add confidence/uncertainty head | Architecture complete, implementation pending | T04 + stable checkpoint + labeled quality examples |
 | T08 | ONNX FP16 export and parity tests | P1 | T06 |
 | T09 | INT8 calibration/QAT study | P1 | T08 |
 | T10 | Web AudioWorklet/WASM integration | P1 | T08 |
@@ -86,4 +86,4 @@ Latest recorded commit: see `git log -1 --oneline`
 
 ## Recommended next session
 
-Next: implement and freeze the fresh unseen challenge set, then implement and calibrate the Confidence Head. When consented "Chen teaches" recordings arrive, run the UX/quality capture using `docs/CHEN_TEACHES_UX_CAPTURE.md`. Before any public deployment, require confidence controls and the frozen challenge set.
+Next: implement and freeze the fresh unseen challenge set, then implement and calibrate the Confidence Head. The current Complex STFT direction is non-competitive and should be frozen unless one tightly bounded objective/loss experiment is justified. When consented "Chen teaches" recordings arrive, run the UX/quality capture using `docs/CHEN_TEACHES_UX_CAPTURE.md`. Before any public deployment, require confidence controls and the frozen challenge set.
